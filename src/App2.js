@@ -1,5 +1,9 @@
 // Now, I am going to create a complex html tree structure and render that.
 // React element (Object) => HTML (Browser Understands)
+import React from "react";
+// import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
+
 const parent = React.createElement(
     "div", 
     {id: "parent"},
