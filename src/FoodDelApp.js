@@ -1,13 +1,16 @@
-import React from "react";
+import React, { lazy, Suspense, useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 
-import Header from "./components/Header.js"; //if you dont give .js then also it's fine.
-import Body from "./components/Body.js";
-import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
+import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import About from "./components/About.js";
+import Body from "./components/Body.js";
 import Contact from "./components/Contact.js";
 import Error from "./components/Error.js";
+import Header from "./components/Header.js"; //if you dont give .js then also it's fine.
 import RestaurantMenu from "./components/RestaurantMenu.js";
+import UserContext from "./utils/UserContext.js";
+// import Grocery from "./components/Grocery.js"; // will lazy-load this component.
+// First resObj
 // const resObj = {
 //     "info": {
 //         "id": "366264",
@@ -96,6 +99,7 @@ import RestaurantMenu from "./components/RestaurantMenu.js";
 //     }
 // }
 
+// Second resObj
 // const resObj = {
 //     "info": {
 //       "id": "727066",
@@ -183,16 +187,13 @@ import RestaurantMenu from "./components/RestaurantMenu.js";
 //     }
 //   }
 
-
 // const styleCard = {
 //     backgroundColor: "#f0f0f0",
 // };
 
-
-
 // const RestaurantCard = ({resName, cuisine}) => (
 //     <div className="res-card" style={{backgroundColor: "#f0f0f0"}}>
-//         <img 
+//         <img
 //             className="res-logo"
 //             alt="res-logo"
 //             src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_660/sv4bqbbuvl4y0axgwrkx"
@@ -207,21 +208,41 @@ import RestaurantMenu from "./components/RestaurantMenu.js";
 
 // got from the API of Swiggy.
 
-
-
 // not using keys(not acceptable) <<<<<<< index as key <<<<<<<<<<< unique id(best practice)
 
-
 // Top-level component
-const AppLayout = () => (
-    <div className="app">
+
+const Grocery = lazy(() => {
+  console.log("Grocery component is being loaded");
+  return import("./components/Grocery");
+}); // lazy loading is a named import from react.
+const AppLayout = () => {
+  const [userName, setUserName] = useState();
+
+  //authentication
+  useEffect(() => {
+    // Make an API call and send username and password
+    const data = {
+      //name: "Akshay Bhai",
+      name: "",
+    };
+    setUserName(data.name);
+  }, []);
+
+  return (
+    <UserContext.Provider value={{ loggedInUser: userName, setUserName }}>
+      <div className="app">
+        {/* <UserContext.Provider value={{loggedInUser: "Elon Musk"}}> */}
         <Header />
+        {/* <h1 className="text-xl">Hi Sushil.</h1> */}
         {/* <Body /> */}
+        {/* </UserContext.Provider> */}
         <Outlet />
         {/* React actaully replaces/substitutes the Outlet component accordingly. React is beauty. */}
-    </div>
-)
-
+      </div>
+    </UserContext.Provider>
+  );
+};
 // createBrowserRouter function takes a list of objects and the objects define each path.
 /*
 const appRouter = createBrowserRouter([
@@ -241,39 +262,51 @@ const appRouter = createBrowserRouter([
     
 ]);
 */
-// Now we will learn about children routes. We want the header to be fixed. I just want the 
+// Now we will learn about children routes. We want the header to be fixed. I just want the
 // change in the Body section. child routing.
 
 const appRouter = createBrowserRouter([
-    {
+  {
+    path: "/",
+    element: <AppLayout />,
+    children: [
+      {
         path: "/",
-        element: <AppLayout />,
-        children: [
-            {
-                path: "/",
-                element: <Body />
-            },
-            {
-                path: "/about",
-                element: <About />
-            },  
-            {
-                path: "/contact",
-                element: <Contact />
-            },
-            {
-                path: "/restaurants/:resId", // every restaurant has their own unique id. So, my route will be uniquely different for different restaurants.
-                element: <RestaurantMenu />
-            }
-        ],
-        errorElement: <Error />
-    },
+        element: <Body />,
+      },
+      {
+        path: "/about",
+        element: <About />,
+      },
+      {
+        path: "/contact",
+        element: <Contact />,
+      },
+      {
+        path: "/grocery",
+        element: (
+          // <Grocery />
+          <Suspense fallback={<h1>Loading...</h1>}>
+            <Grocery />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/restaurants/:resId", // every restaurant has their own unique id. So, my route will be uniquely different for different restaurants.
+        element: <RestaurantMenu />,
+      },
+    ],
+    errorElement: <Error />,
+  },
 ]);
-
-
-
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 // root.render(<AppLayout />)
-root.render(<RouterProvider router={appRouter}/>);
+root.render(<RouterProvider router={appRouter} />);
+
+// Chunking
+// Code splitting
+// Dynamic Building
+// lazy loading --> also known as on demand loading.
+// dynamic import

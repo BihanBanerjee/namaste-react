@@ -1,6 +1,7 @@
 import React from "react";
 import User from "./User.js";
 import UserClass from "./UserClass.js";
+import UserContext from "../utils/UserContext.js";
 
 class About extends React.Component {
     constructor(props){
@@ -28,6 +29,12 @@ class About extends React.Component {
                 <h1>
                     About
                 </h1>
+                <div>
+                  LoggedIn User
+                  <UserContext.Consumer>
+                    {data => <p className="text-xl font-bold">{data.loggedInUser}</p>}
+                  </UserContext.Consumer>
+                </div>
                 <h2>
                     This is Namaste React Web Series
                 </h2>

@@ -1,4 +1,8 @@
-.header{
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* .header{
     display: flex;
     justify-content: space-between;
     border: 1px solid black;
@@ -66,11 +70,11 @@
 }
 
 .login{
-    /* margin-left: 20px; */
     margin-right: 20px;
     padding: 0 20px;
     cursor: pointer;
 }
+
 
 .filter {
     display: flex;
@@ -79,4 +83,5 @@
 .user-card{
     padding: 10px;
     border: 1px solid black;
-}
+} 
+*/
