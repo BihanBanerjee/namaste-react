@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import UserContext from "../utils/UserContext";
 import { LOGO_URL } from "../utils/constants";
 import useOnlineStatus from "../utils/useOnlineStatus";
-import Grocery from "./Grocery";
+//import Grocery from "./Grocery";
 
 const Header = () => {
   // console.log("Header-render");
