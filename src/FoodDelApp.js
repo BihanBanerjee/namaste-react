@@ -7,8 +7,11 @@ import Body from "./components/Body.js";
 import Contact from "./components/Contact.js";
 import Error from "./components/Error.js";
 import Header from "./components/Header.js"; //if you dont give .js then also it's fine.
+import Cart from "./components/Cart.js";
 import RestaurantMenu from "./components/RestaurantMenu.js";
 import UserContext from "./utils/UserContext.js";
+import { Provider } from "react-redux";
+import appStore from "./utils/appStore.js";
 // import Grocery from "./components/Grocery.js"; // will lazy-load this component.
 // First resObj
 // const resObj = {
@@ -230,17 +233,19 @@ const AppLayout = () => {
   }, []);
 
   return (
-    <UserContext.Provider value={{ loggedInUser: userName, setUserName }}>
-      <div className="app">
-        {/* <UserContext.Provider value={{loggedInUser: "Elon Musk"}}> */}
-        <Header />
-        {/* <h1 className="text-xl">Hi Sushil.</h1> */}
-        {/* <Body /> */}
-        {/* </UserContext.Provider> */}
-        <Outlet />
-        {/* React actaully replaces/substitutes the Outlet component accordingly. React is beauty. */}
-      </div>
-    </UserContext.Provider>
+    <Provider store={appStore}>
+      <UserContext.Provider value={{ loggedInUser: userName, setUserName }}>
+        <div className="app">
+          {/* <UserContext.Provider value={{loggedInUser: "Elon Musk"}}> */}
+          <Header />
+          {/* <h1 className="text-xl">Hi Sushil.</h1> */}
+          {/* <Body /> */}
+          {/* </UserContext.Provider> */}
+          <Outlet />
+          {/* React actaully replaces/substitutes the Outlet component accordingly. React is beauty. */}
+        </div>
+      </UserContext.Provider>
+    </Provider>
   );
 };
 // createBrowserRouter function takes a list of objects and the objects define each path.
@@ -294,6 +299,10 @@ const appRouter = createBrowserRouter([
       {
         path: "/restaurants/:resId", // every restaurant has their own unique id. So, my route will be uniquely different for different restaurants.
         element: <RestaurantMenu />,
+      },
+      {
+        path: "/cart",
+        element: <Cart />,
       },
     ],
     errorElement: <Error />,

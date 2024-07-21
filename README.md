@@ -63,3 +63,13 @@
 # 2 types of routing in web apps
  - Client Side Routing - We already have the page in our local codebase. We just need to manipulate the components to render the new page.
  - Server Side Routing - Fetching the page via an API call or network call and then rendering the page.
+
+
+
+# Redux Toolkit
+ - Install @reduxjs/toolkit and react-redux
+ - Build our store
+ - Connect our store to our app
+ - Slice (cartSlice)
+ - Dispatch an action
+ - Selector 
